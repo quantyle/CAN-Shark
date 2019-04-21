@@ -1,0 +1,19 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "/home/chronos/arduino-1.8.5/tools/**",
+                "/home/chronos/arduino-1.8.5/hardware/arduino/avr/**"
+            ],
+            "forcedInclude": [
+                "/home/chronos/arduino-1.8.5/hardware/arduino/avr/cores/arduino/Arduino.h"
+            ],
+            "intelliSenseMode": "gcc-x64",
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c11",
+            "cppStandard": "c++17"
+        }
+    ],
+    "version": 4
+}

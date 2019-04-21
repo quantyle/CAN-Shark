@@ -1,0 +1,7 @@
+{
+    "python.pythonPath": "/home/chronos/.local/share/virtualenvs/CAN_Read_Demo-0EpFZygE/bin/python",
+    "files.associations": {
+        "array": "cpp",
+        "*.tcc": "cpp"
+    }
+}
