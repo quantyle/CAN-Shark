@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "/home/chronos/.local/share/virtualenvs/CAN_Read_Demo-0EpFZygE/bin/python",
+    "python.pythonPath": "/home/zeus/.local/share/virtualenvs/CAN-Shark-lNsRwEoN/bin/python",
     "files.associations": {
         "array": "cpp",
         "*.tcc": "cpp"

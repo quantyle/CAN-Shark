@@ -12,3 +12,22 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+/* react-datasheet overrides */
+.data-grid-container .data-grid .cell.selected {
+  border: 1px double #20B05E;
+}
+
+.data-grid-container .data-grid .cell > input {
+  border: 2px solid #20B05E;
+}
+
+.data-grid .cell.read-only {
+  width: 2% !important;
+}
+
+.data-grid-container .data-grid {
+  width: 100% !important;
+  margin-top: 10px;
+}
+

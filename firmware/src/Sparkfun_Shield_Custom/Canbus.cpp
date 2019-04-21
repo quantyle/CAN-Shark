@@ -23,10 +23,9 @@
 #include "defaults.h"
 #include "Canbus.h"
 
-/* C++ wrapper */
-CanbusClass::CanbusClass()
-{
-}
+
+CanbusClass::CanbusClass(){}
+
 char CanbusClass::message_rx(unsigned char *buffer)
 {
 	tCAN message;
@@ -54,7 +53,7 @@ char CanbusClass::message_rx(unsigned char *buffer)
 		}
 		else
 		{
-			//	PRINT("Kann die Nachricht nicht auslesen\n\n");
+			//	PRINT("Cannot read message\n\n");
 		}
 	}
 }
@@ -63,7 +62,7 @@ char CanbusClass::message_tx(void)
 {
 	tCAN message;
 
-	// einige Testwerte
+	// test values
 	message.id = 0x7DF;
 	message.header.rtr = 0;
 	message.header.length = 8;
@@ -155,7 +154,7 @@ String CanbusClass::ecu_req(unsigned char pid)
 				break;
 
 			case O2_VOLTAGE: // A * 0.005   (B-128) * 100/128 (if B==0xFF, sensor is not used in trim calc)
-				engine_data = message.data[3] * 0.005;
+				engine_data = message.data[3] * 0.005 * (message.data[4]-128) * 100/128;
 				output = String((int)engine_data) + ",";
 				//snprintf(buffer, sizeof(buffer), "%d V",(int) engine_data);
 				break;

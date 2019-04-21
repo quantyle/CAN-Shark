@@ -1,4 +1,4 @@
-#include "src/Sparkfun_Shield_Custom/Canbus.h" // don't forget to include these
+#include "src/Sparkfun_Shield_Custom/Canbus.h"
 #include "src/Sparkfun_Shield_Custom/defaults.h"
 #include "src/Sparkfun_Shield_Custom/global.h"
 #include "src/Sparkfun_Shield_Custom/mcp2515.h"
@@ -31,13 +31,11 @@ void loop()
   {
     char data = Serial.read(); // read incoming bytes
     message += String(data);   // concat incoming bytes to message string
-    if (String(data) == "}")
+    if (String(data) == "}") // find end delimiter
     {
       StaticJsonDocument<456> doc;                                // will hold json data
       DeserializationError error = deserializeJson(doc, message); // deserialize json data
-      //int value = doc["pids"][0];
       delay(30); // rest
-
       int i;
       String response = "[";
       //Serial.println(message);
@@ -46,7 +44,8 @@ void loop()
         String out = Canbus.ecu_req(doc["pids"][i]); // read message from can bus
         if (out == NULL || out == "" || out == " ")
         {
-          response += "\"NULL\",";
+          response += "\"___\",";
+          Serial.print(out);
         }
         else
         {
@@ -61,32 +60,5 @@ void loop()
       message = "";             // clear message
     }
     Serial.flush(); // move on when serial is clear
-
-    // String output = ""; // output for serial
-    //StaticJsonDocument<200> doc; // will hold json data
-    //DeserializationError error = deserializeJson(doc, data); // deserialize json data
-
-    //String out1 = Canbus.ecu_req(doc["pids"][0]);
-    //String out2 = Canbus.ecu_req(doc["pids"][1]);
-
-    // if (out1.length() < 1)
-    // {
-    //   output += "{ \"Engine Coolant Temperature\": \"0\", ";
-    // }
-    // else
-    // {
-    //   output += "{ \"Engine Coolant Temperature\": " + out1 + ", ";
-    // }
-    //memset(buffer, 0, sizeof(buffer));
-    //memset(&buffer[0], 0, sizeof(buffer));
-
-    // if (out2.length() < 1)
-    // {
-    //   output += "{ \"Engine RPM\": \"0\" }";
-    // }
-    // else
-    // {
-    //   output += "{ \"Engine RPM\":" + out2 + " }";
-    // }
   }
 }
