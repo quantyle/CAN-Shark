@@ -1,11 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {
-    withStyles,
+    withStyles, IconButton,
 } from "@material-ui/core";
 import homeStyle from "../../variables/styles/homeStyle.jsx";
 import ReactDataSheet from 'react-datasheet';
-
+import { PlayArrow } from '@material-ui/icons';
 
 class Home extends React.Component {
 
@@ -14,54 +14,53 @@ class Home extends React.Component {
         this.state = {
             data: 0,
             table: [],
+            play: false,
         };
     }
+
+
 
     componentDidMount() {
         let self = this;
         var conn = new WebSocket('ws://localhost:8765/echo');
 
         conn.onmessage = function (e) {
-            console.log(e.data);
-            let data = JSON.parse(e.data.toString());
-            //console.log(data);
-            self.setState({ 
-                data: data,
-                table: [
-                    [{ readOnly: true, value: "" },
-                    { readOnly: true, value: "A" },
-                    { readOnly: true, value: "B" },
-                    { readOnly: true, value: "C" },
-                    { readOnly: true, value: "D" },
-                    { readOnly: true, value: "E" },
-                    { readOnly: true, value: "F" },],
-                    [{ readOnly: true, value: "1" }, { value: data[0] }, { value: "" }, { value: "" }, { value: "" }, { value: "" }, { value: "" }],
-                    [{ readOnly: true, value: "2" }, { value: data[1] }, { value: "" }, { value: "" }, { value: "" }, { value: "" }, { value: "" }],
-                    [{ readOnly: true, value: "3" }, { value: data[2] }, { value: "" }, { value: "" }, { value: "" }, { value: "" }, { value: "" }],
-                    [{ readOnly: true, value: "4" }, { value: data[3] }, { value: "" }, { value: "" }, { value: "" }, { value: "" }, { value: "" }],
-                    [{ readOnly: true, value: "5" }, { value: "" }, { value: "" }, { value: "" }, { value: "" }, { value: "" }, { value: "" }],
-                    [{ readOnly: true, value: "6" }, { value: "" }, { value: "" }, { value: "" }, { value: "" }, { value: "" }, { value: "" }],
-                    [{ readOnly: true, value: "7" }, { value: "" }, { value: "" }, { value: "" }, { value: "" }, { value: "" }, { value: "" }],
-                    [{ readOnly: true, value: "8" }, { value: "" }, { value: "" }, { value: "" }, { value: "" }, { value: "" }, { value: "" }],
-                    [{ readOnly: true, value: "9" }, { value: "" }, { value: "" }, { value: "" }, { value: "" }, { value: "" }, { value: "" }],
-                    [{ readOnly: true, value: "10" }, { value: "" }, { value: "" }, { value: "" }, { value: "" }, { value: "" }, { value: "" }],
-                ] //excel-like table for visualization .csv upload
-            });
-            let pids = [
-                0x05, // engine coolant temp
-                0x0C, // engine rpm
-                0x0D, // vehicle speed
-                0x10, // MAF sensor
-                0x14, // O2 Voltage
-                0x11, // throttle 
-            ];
-            let msg = { //message object 
-                "pids": pids,
-                "len": pids.length,
-            };
+          
+                console.log(e.data);
+                let data = JSON.parse(e.data.toString());
+                //console.log(data);
+                let pids = [
+                    0x05, // engine coolant temp
+                    0x0C, // engine rpm
+                    0x0D, // vehicle speed
+                    0x10, // MAF sensor
+                    0x14, // O2 Voltage
+                    0x11, // throttle 
+                ];
 
-            msg = JSON.stringify(msg); // convert json to string
-            conn.send(msg);
+                let msg = { //message object 
+                    "pids": pids,
+                    "len": pids.length,
+                };
+
+                msg = JSON.stringify(msg); // convert json to string
+                conn.send(msg);
+
+                // udate PIDs 
+                self.setState({
+                    data: data,
+                    table: [
+                        [{ readOnly: true, value: "PID (hex)" },
+                        { readOnly: true, value: "PID (decimal)" },
+                        { readOnly: true, value: "Response" },],
+                        [{ value: "0x" + String(pids[0]).padStart(2, '0') }, { value: data[0] }, { value: "" },],
+                        [{ value: pids[1] }, { value: data[1] }, { value: "" },],
+                        [{ value: pids[2] }, { value: data[2] }, { value: "" },],
+                        [{ value: pids[3] }, { value: data[3] }, { value: "" },],
+                    ] //excel-like table for visualization .csv upload
+                });
+            
+
         };
 
         conn.onopen = function () {
@@ -72,11 +71,12 @@ class Home extends React.Component {
     }
 
 
-    toggleDrawer = () => {
+
+    toggleValue = (name) => {
         this.setState({
-            open: !this.state.open,
+          [name]: !this.state[name],
         });
-    }
+      };
 
 
     render() {
@@ -84,13 +84,9 @@ class Home extends React.Component {
 
         return (
             <div>
-                <div>
-                    {function (e) {
-                        let out = [<div>This is a contact</div>];
-
-                        return out;
-                    }}
-                </div>
+                <IconButton onClick={()=> this.toggleValue("play")}>
+                    <PlayArrow /> 
+                </IconButton>
                 <ReactDataSheet
                     data={this.state.table}
                     valueRenderer={(cell) => cell.value}
@@ -103,7 +99,6 @@ class Home extends React.Component {
                         this.setState({ table });
                     }}
                 />
-                {this.state.data}
             </div>
 
 
