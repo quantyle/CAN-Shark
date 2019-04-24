@@ -3,7 +3,7 @@ import asyncio
 import websockets
 from time import sleep
 import signal
-
+import json
 
 
 class CAN:
@@ -22,12 +22,16 @@ can = CAN()
 async def receiver(websocket, path):
     while True:
         try:
-            request = await websocket.recv()
-            can_data = can.read(request) # read CAN data
-            #can_data = can.read()
-            can_data = can_data[:-5] # remove the '\r\n' from data
-            can_data = can_data[2:]
-            await websocket.send(can_data) # send CAN data to react app
+            request = await websocket.recv() # grab request from front-end
+            parsed_request = json.loads(request) # create request dictionary
+            print(parsed_request)
+            if parsed_request["stop"]:
+                await websocket.send('{}') # send received CAN data to front-end
+            else:
+                can_data = can.read(request) # read data from CAN 
+                can_data = can_data[:-5] # remove the '\r\n' from data
+                can_data = can_data[2:] # remove more garbage
+                await websocket.send(can_data) # send received CAN data to front-end
         except websockets.ConnectionClosed:
             print("Connection closed")
             break

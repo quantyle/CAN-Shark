@@ -5,7 +5,12 @@ import {
 } from "@material-ui/core";
 import homeStyle from "../../variables/styles/homeStyle.jsx";
 import ReactDataSheet from 'react-datasheet';
-import { PlayArrow } from '@material-ui/icons';
+import {
+    PlayArrow,
+    Pause,
+} from '@material-ui/icons';
+
+var connection; // websocket connection
 
 class Home extends React.Component {
 
@@ -14,59 +19,121 @@ class Home extends React.Component {
         this.state = {
             data: 0,
             table: [],
-            play: false,
+            play: true,
         };
+        this.readSocket = this.readSocket.bind(this);
+    }
+
+    decimalToHexString(number) {
+        if (number < 0) {
+            number = 0xFFFFFFFF + number + 1;
+        }
+
+        return number.toString(16).toUpperCase();
+    }
+
+    readSocket = (e, conn) => {
+        let data = JSON.parse(e.data.toString());
+        if (data.length > 0) {
+            //console.log(data);
+            let pids = [
+                // 0x05, // engine coolant temp
+                // 0x0C, // engine rpm
+                // 0x0D, // vehicle speed
+                // 0x10, // MAF sensor
+                // 0x14, // O2 Voltage
+                // 0x11, // throttle 
+            ];
+            for(var i = 1; i < this.state.table.length; i ++){
+                let pid = parseInt(this.state.table[i][0], 16);
+                console.log(pid);
+                pids.push(pid);
+            }
+
+            let msg = { //message object 
+                "pids": pids,
+                "len": pids.length,
+                "stop": this.state.play
+            };
+
+            msg = JSON.stringify(msg); // convert json to string
+            conn.send(msg);
+
+            let table = this.generateTable(data, pids);
+            this.setState({
+                data: data,
+                table: table
+            });
+
+        } else {
+
+            let msg = { //message object 
+                "stop": this.state.play
+            };
+
+            msg = JSON.stringify(msg); // convert json to string
+            conn.send(msg);
+        }
+
+    }
+
+    generateTable(data = [], pids = []) {
+        // table with headers
+        let table = [
+            [{ readOnly: true, value: (<div>PID<sub> 16</sub></div>) },
+            { readOnly: true, value: (<div>PID<sub> 10</sub></div>) },
+            { readOnly: true, value: "Response" },]
+        ];
+        //generate the rest of the table using incoming data
+        for (let i = 0; i < 10; i++) {
+            if (pids[i] && data[i]) { // if there is data at this index, add it to table
+                table.push([ // push row into table
+                    { value: "0x" + this.decimalToHexString(pids[i]).padStart(2, '0') },
+                    { value: pids[i] },
+                    { value: data[i] },
+                ]);
+            } else { // otherwise just add blank rows
+                table.push([ // push row into table
+                    { value: "" },
+                    { value: "" },
+                    { value: "" },
+                ]);
+            }
+
+        }
+        return table;
     }
 
 
 
     componentDidMount() {
         let self = this;
-        var conn = new WebSocket('ws://localhost:8765/echo');
+        connection = new WebSocket('ws://localhost:8765/echo');
 
-        conn.onmessage = function (e) {
-          
-                console.log(e.data);
-                let data = JSON.parse(e.data.toString());
-                //console.log(data);
-                let pids = [
-                    0x05, // engine coolant temp
-                    0x0C, // engine rpm
-                    0x0D, // vehicle speed
-                    0x10, // MAF sensor
-                    0x14, // O2 Voltage
-                    0x11, // throttle 
-                ];
+        connection.onmessage = e => this.readSocket(e, connection);
 
-                let msg = { //message object 
-                    "pids": pids,
-                    "len": pids.length,
-                };
-
-                msg = JSON.stringify(msg); // convert json to string
-                conn.send(msg);
-
-                // udate PIDs 
-                self.setState({
-                    data: data,
-                    table: [
-                        [{ readOnly: true, value: "PID (hex)" },
-                        { readOnly: true, value: "PID (decimal)" },
-                        { readOnly: true, value: "Response" },],
-                        [{ value: "0x" + String(pids[0]).padStart(2, '0') }, { value: data[0] }, { value: "" },],
-                        [{ value: pids[1] }, { value: data[1] }, { value: "" },],
-                        [{ value: pids[2] }, { value: data[2] }, { value: "" },],
-                        [{ value: pids[3] }, { value: data[3] }, { value: "" },],
-                    ] //excel-like table for visualization .csv upload
-                });
-            
-
+        // send initial data
+        connection.onopen = function () {
+            let pids = [
+                0x05, // engine coolant temp
+                0x0C, // engine rpm
+                0x0D, // vehicle speed
+                0x10, // MAF sensor
+                0x14, // O2 Voltage
+                0x11, // throttle 
+            ];
+            let msg = { //message object 
+                "pids": pids,
+                "len": pids.length,
+                "stop": self.state.play
+            };
+            msg = JSON.stringify(msg); // convert json to string
+            connection.send(msg); // send request
         };
 
-        conn.onopen = function () {
-            conn.send("{\"engine_rpm\": \"1\"}");
-        };
-
+        // set initial empty table
+        let table = this.generateTable();
+        this.setState({ table });
 
     }
 
@@ -74,9 +141,9 @@ class Home extends React.Component {
 
     toggleValue = (name) => {
         this.setState({
-          [name]: !this.state[name],
+            [name]: !this.state[name],
         });
-      };
+    };
 
 
     render() {
@@ -84,9 +151,16 @@ class Home extends React.Component {
 
         return (
             <div>
-                <IconButton onClick={()=> this.toggleValue("play")}>
-                    <PlayArrow /> 
-                </IconButton>
+
+                {this.state.play ? (
+                    <IconButton onClick={() => this.toggleValue("play")}>
+                        <PlayArrow />
+                    </IconButton>
+                ) : (
+                        <IconButton onClick={() => this.toggleValue("play")}>
+                            <Pause />
+                        </IconButton>
+                    )}
                 <ReactDataSheet
                     data={this.state.table}
                     valueRenderer={(cell) => cell.value}

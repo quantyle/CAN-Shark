@@ -6,7 +6,8 @@
 #define	P_SCK	B,5
 
 //#define	MCP2515_CS			D,3	// Rev A
-#define	MCP2515_CS			B,2 // Rev B
+//#define	MCP2515_CS			B,2 // original
+#define	MCP2515_CS			C,5 // HACK WITH WIRE
 #define	MCP2515_INT			D,2
 #define LED2_HIGH			B,0
 #define LED2_LOW			B,0
