@@ -37,18 +37,18 @@ class Home extends React.Component {
         if (data.length > 0) {
             //console.log(data);
             let pids = [
-                // 0x05, // engine coolant temp
-                // 0x0C, // engine rpm
-                // 0x0D, // vehicle speed
-                // 0x10, // MAF sensor
-                // 0x14, // O2 Voltage
-                // 0x11, // throttle 
+                0x05, // engine coolant temp
+                0x0C, // engine rpm
+                0x0D, // vehicle speed
+                0x10, // MAF sensor
+                0x14, // O2 Voltage
+                0x11, // throttle 
             ];
-            for(var i = 1; i < this.state.table.length; i ++){
-                let pid = parseInt(this.state.table[i][0], 16);
-                console.log(pid);
-                pids.push(pid);
-            }
+            // for(var i = 1; i < this.state.table.length; i ++){
+            //     let pid = parseInt(this.state.table[i][0], 16);
+            //     console.log(pid);
+            //     pids.push(pid);
+            // }
 
             let msg = { //message object 
                 "pids": pids,

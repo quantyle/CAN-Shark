@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "d3b17fc2fb6cb67c4b7be4e1672c678b2be57990f73c6940ad9a07e6121698ad"
+            "sha256": "1df15dc3a9ccb8cbfdcc118ee11df6e95e196a4544c635ea08686e3a5950c70d"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -16,36 +16,6 @@
         ]
     },
     "default": {
-        "pygame": {
-            "hashes": [
-                "sha256:0043bee7ebe5f1afc188db1c34fae57559ce6555939195b6a42fbdc1950c1b3c",
-                "sha256:0d5893bab526ce73d8bda22e0c43f24c2cfddeae489d0eca576199975ecb2246",
-                "sha256:28dda1b4038cbb710ee8ffa4df8234f8579b6b965a1f8a2434e8dea4914b139c",
-                "sha256:3baa3aa5d90eda8d54f56caff1a1c80258ebfa328241b5da92ba3fc993a86bdd",
-                "sha256:42c9bf49926826fac26827b87d278408998eb4638bdd5d64c14fdeb28ee3ebcc",
-                "sha256:4b3c01b2974de23873da78daad28d1a5d57c149b5009ae3631e220b9999b9b35",
-                "sha256:4b4f687d5772b0373fd976a0f013059cba3819f699837b82540d51315b9b6d46",
-                "sha256:6a50a4296a6969d80173ec7d414cd09718cdc3f7a69bd41514369b3a3a742c0f",
-                "sha256:7c8c8e2b837f95a4b284d9baae695b05f9f24e1ab9ebc1ea0a3088c1c6dcf30c",
-                "sha256:8f64c2668cc14d376ea095819136e6b825e3b7080370fe0abf2a77e8a99e6d56",
-                "sha256:9ba33f4fedb4c6d9cdd2d32b6dfc5e58edebb692371205af6054dc5f6ca5abdd",
-                "sha256:a119b1bd7cb37d804aa7293cb835e14e2649ecd58768fd2dcbfd2da294d7d60b",
-                "sha256:a43609c9637ab66c10bef66d76435211d44a0d03f6519121f79c7ab1734a4d03",
-                "sha256:b16231466cddc9c55b9d6e006f1c6b5be2ef2dbe5b6516531513d5f427f88dd1",
-                "sha256:b2161c86003d264f94249c064395d984cb3eb86974be8b3ebebcdd56ee633352",
-                "sha256:b62afb88435d2aa80a47b372f99ad74750c81d924abf3bf44a900991ce02bf0a",
-                "sha256:cd7fcdc4a8ec7110866580e84945d550c7652c105838a155fac3252a02580480",
-                "sha256:d01c43550ef837a68bb3141e72d89ebaf9bcdc005158f265c348b5dbce81d308",
-                "sha256:d15e7238015095a12c19379565a66285e989fdcb3807ec360b27338cd8bdaf05",
-                "sha256:d560fd5efd6b887a2f7eb30f61e383a7edbe8a1afe5d5fb7b857315372de359f",
-                "sha256:ef17614d4411a4eadea941245ae3112dbd134c97b0d29bfc86948961818057ec",
-                "sha256:f0eee24dcb8d58d95eb47d946d18354f9720e4dfb0c4b1c59fffcec3ddaf0ebe",
-                "sha256:f7bfaf75e35f6d1093cf05f161667fae0d158cd3cc13c9e8c97d0c4b2a12e397",
-                "sha256:fc8bda436482458412d01e595e7a88dd777416d422ff1e45b9a6d96287806255"
-            ],
-            "index": "pypi",
-            "version": "==1.9.5"
-        },
         "pyserial": {
             "hashes": [
                 "sha256:6e2d401fdee0eab996cf734e67773a0143b932772ca8b42451440cfed942c627",

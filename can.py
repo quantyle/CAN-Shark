@@ -7,7 +7,7 @@ import json
 
 
 class CAN:
-    def __init__(self, id='/dev/ttyACM0', baud=115200):
+    def __init__(self, id='/dev/ttyACM2', baud=115200):
         self.arduino = serial.Serial(id, baud)
     def read(self, msg='\0'):
         self.arduino.write(msg.encode()) 
@@ -46,3 +46,5 @@ stop = asyncio.Future()
 loop.add_signal_handler(signal.SIGTERM, stop.set_result, None)
 
 loop.run_until_complete(server(stop))
+
+

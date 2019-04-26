@@ -5,7 +5,6 @@ verify_ssl = true
 
 [packages]
 pyserial = "*"
-pygame = "*"
 websockets = "*"
 
 [requires]
