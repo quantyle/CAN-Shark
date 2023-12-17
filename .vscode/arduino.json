@@ -1,5 +1,0 @@
-{
-    "board": "arduino:avr:uno",
-    "sketch": "firmware/CAN_Shark.ino",
-    "port": "/dev/ttyACM1"
-}
